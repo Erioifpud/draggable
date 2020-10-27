@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="https://s1.ax1x.com/2020/05/07/YmZNGV.png"/>
+  <link rel="apple-touch-icon" href="https://s1.ax1x.com/2020/05/07/YmZNGV.png">
+  <link rel="shortcut icon" type="image/x-icon" href="https://s1.ax1x.com/2020/05/07/YmZNGV.png">
+  <title>Draggable</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    .card {
+      position: absolute;
+      width: 300px;
+      height: 200px;
+      border: 1px solid #666;
+    }
+    .bar {
+      position: absolute;
+      height: 20px;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background: gray;
+      cursor: grab;
+    }
+    .resize {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: red;
+      bottom: 0;
+      right: 0;
+      cursor: nwse-resize;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="bar"></div>
+    <div class="resize"></div>
+  </div>
+  <% for(var i=0; i < htmlWebpackPlugin.files.js.length; i++) {%>
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[i] %>"></script>
+  <% } %>
+  <script>
+    const Draggable = window.Draggable.default
+    const cardEl = document.querySelector('.card')
+    const barEl = document.querySelector('.bar')
+    const resizeEl = document.querySelector('.resize')
+    const moveInstance = new Draggable({
+      el: barEl,
+      movingBox: cardEl,
+      parent: document.body
+    })
+    moveInstance.on('dragging', (ev, { top, left }) => {
+      cardEl.style.top = `${top}px`
+      cardEl.style.left = `${left}px`
+    })
+    const resizeInstance = new Draggable({
+      el: resizeEl,
+      movingBox: cardEl,
+      parent: document.body,
+      hasBorder: false
+    })
+    resizeInstance.on('dragStart', (ev, ctx) => {
+      const { x, y } = cardEl.getBoundingClientRect()
+      ctx.width = cardEl.getBoundingClientRect().width
+      ctx.height = cardEl.getBoundingClientRect().height
+      ctx.x = cardEl.getBoundingClientRect().x
+      ctx.y = cardEl.getBoundingClientRect().y
+    })
+    resizeInstance.on('dragging', (ev, { top, left }, ctx) => {
+      const calcHeight = ctx.height + top - ctx.y
+      const calcWidth = ctx.width + left - ctx.x
+      cardEl.style.width = `${calcWidth < 300 ? 300 : calcWidth}px`
+      cardEl.style.height = `${calcHeight < 200 ? 200 : calcHeight}px`
+    })
+    window.onunload = () => {
+      moveInstance.destroy()
+      resizeInstance.destroy()
+    }
+  </script>
+</body>
+</html>

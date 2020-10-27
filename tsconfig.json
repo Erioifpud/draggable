@@ -1,0 +1,15 @@
+{
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "module": "commonjs",
+    "sourceMap": true,
+    "target": "es5",
+    "declaration": true,
+    "declarationDir": "./@types",
+    "lib": [
+      "es5",
+      "dom",
+      "es2015.promise"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "extends": "standard",
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "globals": {
+    "document": true,
+    "window": true
+  },
+  "env": {
+    "es2021": true,
+    "browser": true
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {
+  }
+}
